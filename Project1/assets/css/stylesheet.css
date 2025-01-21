@@ -1,0 +1,118 @@
+*{
+    font-family:sans-serif;
+}
+body{
+    margin: 0;
+    /* margin-right: -5; */
+    text-align: center;
+}
+nav{
+    /* position: sticky; */
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    background-color: rgb(40, 52, 116);
+    color:white;
+    height: 80px;
+    /* padding: 40px; */
+    z-index: 2;
+}
+nav h1{
+    margin: 0;
+    padding-top: 20px;
+}
+nav ul{
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+nav ul li{
+    display: inline-block;
+    
+}
+nav ul li a{
+    padding-right: 5px;
+    color:white;
+    text-decoration: none;
+}
+
+/* #spacer{
+    height:80px;
+} */
+.introduction{
+    background-color: rgb(224, 224, 224);
+    padding-bottom: 40px;
+}
+.introduction h1{
+    margin: 0%;
+    padding-top: 80px;
+}
+
+.gallery h2{
+    text-align: left;
+    padding-top: 80px;
+    padding-left: 10px;
+}
+
+.gallery figure{
+    display: inline-block;
+    background-color: rgba(90, 90, 90, 0.023);
+    border: 1px solid;
+    border-radius: 8px;
+    border-color: rgb(52, 52, 52);
+    width: 300px;
+    height: 300px;
+    transition: transform 0.3s ease;
+    transition: box-shadow 0.3s ease;
+}
+
+.gallery figure:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gallery figure img{
+    width: 250px;
+    height: 250px;
+    border-radius: 8px;
+    padding-top: 5px;
+}
+
+.gallery figure figcaption{
+    color: rgb(160, 160, 160);
+}
+
+.contact{
+    display:block; 
+    margin-top: 90px;
+    margin-left: auto;
+    margin-right: auto;
+    /* position: absolute; */
+    width: 400px;
+    /* height:auto; */
+    border: 1px solid;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+.contact h3{
+    text-align: left;
+    padding-left: 15px;
+}
+
+.contact label{
+    display: block;
+    text-align: left;
+    padding-left: 110px;
+    padding-bottom: 5px;
+}
+.contact textarea{
+    height: 100px;
+}
+
+footer{
+    background-color:  rgb(40, 52, 116);
+    color: white;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%; 
+}

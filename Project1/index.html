@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/stylesheet.css">
+    <title>Victor's Pets</title>
+</head>
+<body>
+    <!-- Should be nav bar -->
+    <nav>
+        <h1>Photo Portfolio</h1>
+        <div>
+            <ul>
+                <li><a href="#intro">About</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="spacer">
+        <!-- empty div for spacing -->
+    </div>
+    <!-- Should be div for first section.  -->
+     <section class="introduction" id="intro">
+        <h1>Pawesome Pets</h1>
+        <p>Life with my pet-crew</p>
+     </section>
+
+     <!-- Section for gallery -->
+      <section class="gallery" id="gallery">
+        <h2>Gallery</h2>
+        <!-- image one -->
+        <figure>
+            <img src="./assets/images/cheeto.jpg">
+            <figcaption>This is my cat Cheeto</figcaption>
+        </figure>
+        <!-- image two -->
+        <figure>
+            <img src="./assets/images/ming.jpg">
+            <figcaption>This is my cat Ming</figcaption>
+        </figure>
+        <!-- image three -->
+        <figure>
+            <img src="./assets/images/lilly.jpg">
+            <figcaption>This is my cat Lilly</figcaption>
+        </figure>
+        <figure>
+            <img src="./assets/images/hammy.jpg">
+            <figcaption>This is my hamster Hammy</figcaption>
+        </figure>
+      </section>
+      <!-- Section for contact form -->
+      <section class="contact" id="contact">
+        <h3>Contact me!</h3>
+        <form action="/my-form-page" method="post">
+            <p>
+                <label for="name">Name:</label>
+                <input required id="name" type="text" name="user-name">
+            </p>
+            <p>
+                <label for="mail">Email:</label>
+                <input required id="mail" type="email" name="user-email">
+            </p>
+            <p>
+                <label for="msg">Message:</label>
+                <textarea required id="msg" name="user-message"></textarea>
+            </p>
+            <p>
+                <button type="submit">Send</button>
+            </p>
+        </form>
+      </section>
+
+      <!-- here should be the footer -->
+       <footer>© 2025 photo portfolio, all rights reserved.</footer>
+
+</body>
+</html>
