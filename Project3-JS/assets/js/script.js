@@ -6,11 +6,12 @@ let possibleWords = [
     "CSS"
 ]
 
-let currentWordArray, underscoresLength, underscoresArray, guessAmount = 8, lettersGuessed = [], userInput, hasWon;
+let currentWordArray, underscoresLength, underscoresArray, guessAmount = 8, lettersGuessed = [], userInput, hasWon, winCount = 0, lossCount = 0;
 
 
 function startGame(){
     hasWon = false;
+    guessAmount = 8;
     let randomWord = Math.floor(Math.random() * possibleWords.length);
     currentWordArray = possibleWords[randomWord].split("");
     console.log(`game started from button`);
@@ -26,7 +27,7 @@ function startGame(){
 function gameAlertBox(){
 
 let lettersToDisplay = lettersGuessed.length > 0 ? `Letters guessed: ${lettersGuessed.join(", ")}` : "";
-let messageToDisplay = `Your word: ${underscoresArray.join(" ")}\nGuesses left: ${guessAmount}\n${lettersToDisplay}`;
+let messageToDisplay = `Your word: ${underscoresArray.join(" ")}\nGuesses left: ${guessAmount}\n${lettersToDisplay} \nWins: ${winCount} \nLosses: ${lossCount}`;
 
 if(!underscoresArray.includes("_")){
     // alert(`You win!`);
@@ -35,12 +36,14 @@ if(!underscoresArray.includes("_")){
     lettersToDisplay = lettersGuessed.length > 0 ? `Letters guessed: ${lettersGuessed.join(", ")}` : "";
 }
 if(hasWon){
-    alert(`you win! the word was ${currentWordArray.join("")}`);
-    // if(`Do you want to play again?`);
-    if(confirm(`Do you want to play again?`)){
+    winCount++;
+    lettersGuessed = [];
+    lettersToDisplay = "";
+    alert(`You win! the word was ${currentWordArray.join("")}`);
+    if(confirm(`Do you want to play again? \nWins: ${winCount} \nLosses: ${lossCount}`)){
         startGame();
     } else {
-        alert(`Thank you for playing!`);
+        alert(`Thank you for playing! \nWins: ${winCount} \nLosses: ${lossCount}`);
         return;
     }
 }
@@ -68,8 +71,18 @@ if(!/^[a-zA-Z]$/.test(UserInput)){
             gameAlertBox();
         } else {
             if(guessAmount <= 0){
+                lossCount++;
                 alert(`Game over!`);
                 alert(`The correct word was ${currentWordArray.join("")}!`);
+                if(confirm(`Do you want to play again? \nWins: ${winCount} \nLosses: ${lossCount}`)){
+                    lettersGuessed = [];
+                    lettersToDisplay = "";
+                    startGame();
+                }
+                else{
+                    alert(`Thank you for playing! \nWins: ${winCount} \nLosses: ${lossCount}`);
+                    return;
+                }
             } else {
             alert(`Wrong guess!`);
             guessAmount--; 
@@ -83,7 +96,7 @@ if(!/^[a-zA-Z]$/.test(UserInput)){
 
 }
 
-if(confirm(`start game?`)){
+if(confirm(`Start game?`)){
     startGame();
 } else {
     alert(`Thanks for stopping by!`);
