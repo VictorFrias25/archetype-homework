@@ -28,6 +28,23 @@ function gameAlertBox(){
 let lettersToDisplay = lettersGuessed.length > 0 ? `Letters guessed: ${lettersGuessed.join(", ")}` : "";
 let messageToDisplay = `Your word: ${underscoresArray.join(" ")}\nGuesses left: ${guessAmount}\n${lettersToDisplay}`;
 
+if(!underscoresArray.includes("_")){
+    // alert(`You win!`);
+    hasWon = true;
+    lettersGuessed = [];
+    lettersToDisplay = lettersGuessed.length > 0 ? `Letters guessed: ${lettersGuessed.join(", ")}` : "";
+}
+if(hasWon){
+    alert(`you win! the word was ${currentWordArray.join("")}`);
+    // if(`Do you want to play again?`);
+    if(confirm(`Do you want to play again?`)){
+        startGame();
+    } else {
+        alert(`Thank you for playing!`);
+        return;
+    }
+}
+
 UserInput = prompt(messageToDisplay).trim();
 
 if(!/^[a-zA-Z]$/.test(UserInput)){
