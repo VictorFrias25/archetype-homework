@@ -14,7 +14,7 @@ function newYTsearch(){
         data.items.forEach((element) => {
             displayDiv.innerHTML += `
             <a target="_blank" href="https://www.youtube.com/watch?v=${element.id.videoId}">
-            <img src="${element.snippet.thumbnails.high.url}" />
+            <img src="${element.snippet.thumbnails.high.url}" height="200" width="300"/>
             <h4>${element.snippet.title}</h4> </a>
             `
         });
