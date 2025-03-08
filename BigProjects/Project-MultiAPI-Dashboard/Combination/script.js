@@ -27,8 +27,8 @@ $(document).ready(function(){
 
     function gameDBSearch(){
         searchTerm = searchQuery.val()
-        const corsURL = 'https://cors-anywhere.herokuapp.com/' + encodeURI('https://api.igdb.com/v4/games')
-        // const corsURL = 'https://proxy.cors.sh/' + encodeURI('https://api.igdb.com/v4/games')
+        // const corsURL = 'https://cors-anywhere.herokuapp.com/' + encodeURI('https://api.igdb.com/v4/games')
+         const corsURL = 'https://proxy.cors.sh/' + encodeURI('https://api.igdb.com/v4/games')
             fetch(corsURL,{
                 method: 'post',
                 headers: {
@@ -152,13 +152,55 @@ $(document).ready(function(){
             data:{
                 query: gameTitle
             },
+            // dataType: "json",
             success: function(response){
-                console.log(response)
+            console.log("Full array:", response)
+
+            let exactMatch = response.data.find(game => game.name.toLowerCase() === gameTitle.toLowerCase())
+
+            if (exactMatch) {
+                console.log("Exact Match Found:", exactMatch)
+                console.log(`Game ID: ${exactMatch.id}`)
+                ttvLiveStreamsAjax(exactMatch.id)
+            } else {
+                console.log("No exact match found.")
+            }
             },
             error: function(error){
                 console.error(`ttv error: ${error}`)
             }
         })
+    }
+
+    function ttvLiveStreamsAjax(gameId) {
+        $.ajax({
+            url: "https://api.twitch.tv/helix/streams",
+            method: "GET",
+            headers: {
+                "Client-ID": twitch.clientID,
+                "Authorization": twitch.accessToken
+            },
+            data: {
+                game_id: gameId, // Search streams by the game's ID
+                first: 10 // Limit the number of results (max 100)
+            },
+            success: function(response) {
+                console.log("Live Streams:", response)
+    
+                if (response.data.length > 0) {
+                    response.data.forEach(stream => {
+                        console.log(`🔴 Live: ${stream.user_name} - Viewers: ${stream.viewer_count}`)
+                        console.log(`URL: https://www.twitch.tv/${stream.user_name}`)
+                        displayTTV(response.data)
+                    });
+                } else {
+                    console.log("No live streams found for this game.")
+                }
+            },
+            error: function(error) {
+                console.error(`Twitch API Error: ${error.responseText}`)
+            }
+        });
     }
 
     function displayYT(videos) {
@@ -186,13 +228,48 @@ $(document).ready(function(){
           </div>
             `)
         ytDiv.removeClass("d-none")
-        ttvDiv.addClass("d-none")
         ytDiv.html(`<div class="row">${videoHTML}</div>`);
         }
 
-    function displayTTV(videos){
-        ytDiv.addClass("d-none")
-        ttvDiv.removeClass("d-none")
+    function displayTTV(streams){
+        console.log(streams)
+        // ytDiv.addClass("d-none")
+        // ttvDiv.removeClass("d-none")
+        let streamHTML = streams.map(stream => `
+            <div class="col-md-4">
+                <div class="card">
+                    <iframe class="card-img-top" width="100%" height="200" 
+                        src="https://player.twitch.tv/?channel=${stream.user_name}&parent=localhost" 
+                        frameborder="0" allowfullscreen>
+                    </iframe>
+                    <div class="card-body text-dark">
+                        <h5 class="card-title">${stream.user_name}</h5>
+                        <p class="card-text">Viewers: ${stream.viewer_count}</p>
+                        <a href="https://www.twitch.tv/${stream.user_name}" target="_blank" 
+                            class="btn btn-primary">Watch on Twitch</a>
+                    </div>
+                </div>
+            </div>
+        `).join('')
+
+        ttvDiv.html(streamHTML)
+    }
+
+    function displayFavorites() {
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    
+        if (favorites.length === 0) {
+            $(".favorites-list").html("<p>No favorite games yet.</p>");
+            return;
+        }
+    
+        let favHTML = favorites.map(game => `
+            <div class="favorite-item">
+                <p>${game} <button class="btn btn-danger remove-favorite" data-game="${game}">❌ Remove</button></p>
+            </div>
+        `).join('');
+    
+        $(".favorites-list").html(favHTML);
     }
 
 
@@ -206,6 +283,16 @@ $(document).ready(function(){
         //     event.preventDefault()
         //     ttvAjaxSearch(searchQuery.val())
         // } test code for ttv search query
+    })
+
+    $(document).on("change", "#YTorTTV", function(){
+        if ($(this).is(":checked")) {
+            ytDiv.addClass("d-none")
+            ttvDiv.removeClass("d-none")
+        } else {
+            ytDiv.removeClass("d-none")
+            ttvDiv.addClass("d-none")
+        }
     })
 
     $(document).on("click", ".searchYT", function(){
@@ -227,6 +314,7 @@ $(document).ready(function(){
                             <p class="card-text"><small class="text-body-secondary">${$(this).data("rating")}/100</small></p>
                         </div>
                     </div>
+                    <button class="btn btn-outline-warning favorite-btn" data-game="${gameTitle}">⭐ Favorite</button>
                 </div>
             </div>
         </button>
@@ -235,5 +323,32 @@ $(document).ready(function(){
         console.log(`searching youtube for ${gameTitle}`)
         youtubeAjaxSearch(gameTitle)
         ttvAjaxSearch(gameTitle)
+    })
+
+    $(document).on("click", ".favorite-btn", function () {
+        let gameName = $(this).data("game")
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || []
+    
+        if (!favorites.includes(gameName)) {
+            favorites.push(gameName)
+            localStorage.setItem("favorites", JSON.stringify(favorites))
+            alert(`${gameName} added to favorites!`)
+        } else {
+            alert(`${gameName} is already in favorites.`)
+        }
+    })
+
+    $(document).on("click", ".remove-favorite", function () {
+        let gameName = $(this).data("game")
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || []
+    
+        favorites = favorites.filter(game => game !== gameName)
+        localStorage.setItem("favorites", JSON.stringify(favorites))
+    
+        displayFavorites()
+    })
+
+    $(document).ready(function () {
+        displayFavorites()
     })
 })
