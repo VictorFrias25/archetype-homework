@@ -37,8 +37,40 @@ function ttvSearch(){
     })
 }
 
+function ttvSearchStream(){
+    searchTerm = searchinput.value
+    fetch(`https://cors-anywhere.herokuapp.com/https://api.twitch.tv/kraken/streams?game${searchTerm}`,{
+        method: 'get',
+        headers: {
+            "Client-ID": initalData.clientID,
+            "Authorization": initalData.accessToken
+        }
+    }).then(reply => {
+        if(!reply.ok)
+            throw new Error(`http error. status ${reply.status}`)
+        return reply.json()
+    }).then(replyData => {
+        console.log(replyData.data)
+        displayDiv.innerHTML = replyData.data.map(item => {
+            let cover = item.box_art_url.replace("{width}", "200").replace("{height}", "300")
+            return `
+            <div class="game-cat">
+                <a href="https://www.twitch.tv/directory/game/${encodeURIComponent(item.name)}" target="_blank">
+                 <img src="${cover}" width="144" height="192">
+                </a>
+                <h3>${item.name}</h3>
+            </div>
+            `
+        }).join('')
+
+    }).catch(error => {
+        console.log(error)
+        alert(error)
+    })
+}
+
 searchbtn.addEventListener("click", (event) => {
-    ttvSearch()
+    ttvSearchStream()
 })
 
 searchinput.addEventListener("keydown", (event) => {
